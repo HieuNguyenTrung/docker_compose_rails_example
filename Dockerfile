@@ -8,5 +8,15 @@ RUN mkdir /app
 WORKDIR /app
 
 ADD Gemfile /app
+ADD Gemfile.lock /app
 
-RUN bundle install
+COPY ./Dockerfiles/docker-entrypoint.sh /
+RUN chmod +x /docker-entrypoint.sh
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+ENV BUNDLE_PATH=/bundle \
+  BUNDLE_BIN=/bundle/bin \
+  GEM_HOME=/bundle
+
+ENV PATH="${BUNDLE_BIN}:${PATH}"
